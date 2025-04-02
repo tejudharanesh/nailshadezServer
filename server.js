@@ -3,7 +3,9 @@ import pkg from "body-parser";
 const { json } = pkg;
 import { connect, Schema, model } from "mongoose";
 import cors from "cors";
+import dotenv from "dotenv";
 
+dotenv.config();
 const app = express();
 
 // Middleware
@@ -11,9 +13,7 @@ app.use(cors());
 app.use(json());
 
 // Connect to MongoDB
-connect(
-  "mongodb+srv://nailshadezdotcom:uCOqaUpJMzQI0iP3@bookingdata.a90zrkp.mongodb.net/?retryWrites=true&w=majority&appName=bookingData"
-)
+connect(process.env.MONGODB_URI)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error(err));
 
@@ -30,6 +30,11 @@ const bookingSchema = new Schema({
 });
 
 const Booking = model("Booking", bookingSchema);
+
+//home get request
+app.get("/", (req, res) => {
+  res.send("Hello from the server!");
+});
 
 // Endpoint to create a booking
 app.post("/api/bookings", async (req, res) => {
